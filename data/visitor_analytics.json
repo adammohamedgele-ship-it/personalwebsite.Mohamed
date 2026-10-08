@@ -1,0 +1,131 @@
+{
+  "totalPageViews": 149,
+  "uniqueVisitors": 95,
+  "todayViews": 15,
+  "todayUnique": 10,
+  "last7DaysViews": 149,
+  "last7DaysUnique": 95,
+  "deviceBreakdown": {
+    "desktop": 89,
+    "mobile": 52,
+    "tablet": 8
+  },
+  "referrerSources": {
+    "Direkt (Direktaufruf)": 64,
+    "Bewerbungsunterlagen / QR-Code": 42,
+    "LinkedIn": 27,
+    "GitHub": 16
+  },
+  "sectionViews": {
+    "hero": 148,
+    "about": 122,
+    "experience": 114,
+    "projects": 109,
+    "skills": 96,
+    "certificates": 88,
+    "contact": 76
+  },
+  "dailyHistory": [
+    {
+      "date": "2026-10-02",
+      "views": 20,
+      "uniques": 14
+    },
+    {
+      "date": "2026-10-03",
+      "views": 24,
+      "uniques": 16
+    },
+    {
+      "date": "2026-10-04",
+      "views": 32,
+      "uniques": 22
+    },
+    {
+      "date": "2026-10-05",
+      "views": 30,
+      "uniques": 21
+    },
+    {
+      "date": "2026-10-06",
+      "views": 29,
+      "uniques": 20
+    },
+    {
+      "date": "2026-10-07",
+      "views": 22,
+      "uniques": 15
+    },
+    {
+      "date": "2026-10-08",
+      "views": 15,
+      "uniques": 10
+    }
+  ],
+  "recentSessions": [
+    {
+      "id": "sess-1791458374437",
+      "visitorId": "Besucher #149",
+      "timestamp": "2026-10-08T11:19:34.437Z",
+      "device": "desktop",
+      "referrer": "LinkedIn",
+      "source": "LinkedIn",
+      "language": "de-DE",
+      "sectionsViewed": [
+        "projects"
+      ]
+    },
+    {
+      "id": "sess-seed-1",
+      "visitorId": "Besucher #148",
+      "timestamp": "2026-10-08T11:01:30.064Z",
+      "device": "desktop",
+      "referrer": "Bewerbungsunterlagen / QR-Code",
+      "source": "Hamburg IT Recruiting",
+      "language": "de-DE",
+      "sectionsViewed": [
+        "hero",
+        "experience",
+        "projects",
+        "certificates",
+        "contact"
+      ]
+    },
+    {
+      "id": "sess-seed-2",
+      "visitorId": "Besucher #147",
+      "timestamp": "2026-10-08T10:04:30.064Z",
+      "device": "mobile",
+      "referrer": "Direktaufruf",
+      "source": "Direkt",
+      "language": "de-DE",
+      "sectionsViewed": [
+        "hero",
+        "about",
+        "experience",
+        "contact"
+      ]
+    },
+    {
+      "id": "sess-seed-3",
+      "visitorId": "Besucher #146",
+      "timestamp": "2026-10-08T08:59:30.064Z",
+      "device": "desktop",
+      "referrer": "LinkedIn",
+      "source": "Empfehlungsnetzwerk IT",
+      "language": "en-US",
+      "sectionsViewed": [
+        "hero",
+        "projects",
+        "skills"
+      ]
+    }
+  ],
+  "knownVisitorIds": [
+    "visitor-seed-1",
+    "visitor-seed-2",
+    "visitor-seed-3",
+    "test-vis-99"
+  ],
+  "lastUpdated": "2026-10-08T11:19:34.437Z"
+}

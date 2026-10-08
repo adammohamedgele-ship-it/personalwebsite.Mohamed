@@ -1,0 +1,32 @@
+[
+  {
+    "id": "msg-1791458362652-nvuwm",
+    "name": "IT Recruiter Hamburg",
+    "email": "recruiting@hamburg-it.de",
+    "replyTo": "recruiting@hamburg-it.de",
+    "recipientEmail": "adammohamedgele@gmail.com",
+    "subject": "Ausbildungsplatz Fachinformatik",
+    "message": "Sehr geehrter Herr Adam, wir haben Ihr Portfolio gesehen und möchten Sie zu einem Gespräch einladen.",
+    "timestamp": "2026-10-08T11:19:22.652Z",
+    "read": false,
+    "deliveryStatus": "delivered"
+  },
+  {
+    "id": "msg-1791457449529-mopln",
+    "name": "Adam Mohammed",
+    "email": "adammohamedgele@gmail.com",
+    "subject": "schuler ",
+    "message": "hi \n",
+    "timestamp": "2026-10-08T11:04:09.529Z",
+    "read": false
+  },
+  {
+    "id": "msg-1791457260093-gid7l",
+    "name": "mohamed ",
+    "email": "dhakobir83@gmail.com",
+    "subject": "schuler ",
+    "message": "hi \n",
+    "timestamp": "2026-10-08T11:01:00.093Z",
+    "read": false
+  }
+]

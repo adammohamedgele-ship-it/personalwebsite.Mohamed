@@ -36,6 +36,10 @@ import {
   Monitor,
   Tablet,
   Lock,
+  Copy,
+  ExternalLink,
+  Terminal,
+  Globe2,
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Language, ExperienceItem, Project, CertificationItem } from '../types';
@@ -92,6 +96,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
   const [recipientEmailInput, setRecipientEmailInput] = useState(data.adminSettings?.contactRecipientEmail || 'adammohamedgele@gmail.com');
   const [publishSuccessNotice, setPublishSuccessNotice] = useState<string | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  // GitHub Pages Deployment Helper State
+  const [ghUser, setGhUser] = useState<string>('adammohamedgele');
+  const [ghRepo, setGhRepo] = useState<string>('portfolio');
+  const [copiedGhCommands, setCopiedGhCommands] = useState<boolean>(false);
+  const [copiedGhUrl, setCopiedGhUrl] = useState<boolean>(false);
 
   // Deletion Confirmation Modal State
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
@@ -1586,36 +1596,252 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
           {/* TAB 6: Publishing & Custom Domain */}
           {activeTab === 'publishing' && (
-            <div className="space-y-5">
-              <div className="p-5 rounded-xl bg-[#0d0c1d] border border-purple-900/30 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-pink-400" />
-                  <h4 className="text-sm font-bold text-white">
-                    {language === 'de' ? 'Live-Status & Veröffentlichung' : 'Live Status & Publishing'}
-                  </h4>
-                </div>
-                <p className="text-neutral-300 leading-relaxed">
-                  {language === 'de'
-                    ? 'Ihre Website ist öffentlich für Arbeitgeber und Recruiter erreichbar. Besucher können alle Inhalte lesen, aber ohne Anmeldung nichts editieren.'
-                    : 'Your website is live and accessible to employers. Visitors have clean read-only access without edit tools.'}
-                </p>
+            <div className="space-y-6">
+              {/* GitHub Pages Live Link Hub */}
+              <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#120e29] via-[#0d0c1d] to-[#1a1130] border border-purple-800/50 shadow-xl space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-purple-900/40 pb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-pink-600/20 border border-pink-500/40 flex items-center justify-center text-pink-400">
+                      <Globe2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-white flex items-center gap-2">
+                        <span>GitHub Pages Live-Link & Veröffentlichung</span>
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-300 text-[10px] font-mono">
+                          Auto-Deploy Ready
+                        </span>
+                      </h4>
+                      <p className="text-xs text-neutral-400">
+                        {language === 'de'
+                          ? 'Ihre Website wird über GitHub Actions und GitHub Pages öffentlich bereitgestellt.'
+                          : 'Your portfolio is deployed automatically via GitHub Pages and GitHub Actions.'}
+                      </p>
+                    </div>
+                  </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
                     onClick={handlePublishLive}
-                    className="px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-semibold flex items-center gap-2 shadow-md shadow-pink-500/25"
+                    className="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-md shadow-pink-600/30 shrink-0"
                   >
                     <Check className="w-4 h-4" />
-                    <span>{language === 'de' ? 'Jetzt live veröffentlichen' : 'Publish Live Now'}</span>
+                    <span>{language === 'de' ? 'Änderungen publizieren' : 'Publish Live'}</span>
                   </button>
+                </div>
 
-                  <button
-                    onClick={onOpenDesignModal}
-                    className="px-4 py-2.5 rounded-xl bg-[#1a1733] hover:bg-[#252148] border border-purple-800 text-white font-semibold flex items-center gap-2"
-                  >
-                    <Layers className="w-4 h-4 text-pink-400" />
-                    <span>{language === 'de' ? 'Design & Layouts anpassen' : 'Design Studio'}</span>
-                  </button>
+                {/* GitHub Username & Repo Configuration to calculate exact URL */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                  <div>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                      GitHub Benutzername (Username):
+                    </label>
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#070611] border border-purple-900/50 text-white text-xs">
+                      <span className="text-neutral-500 font-mono">github.com/</span>
+                      <input
+                        type="text"
+                        value={ghUser}
+                        onChange={(e) => setGhUser(e.target.value)}
+                        placeholder="adammohamedgele"
+                        className="bg-transparent flex-1 focus:outline-none text-pink-300 font-mono font-medium"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                      GitHub Repository-Name:
+                    </label>
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#070611] border border-purple-900/50 text-white text-xs">
+                      <span className="text-neutral-500 font-mono">repo:</span>
+                      <input
+                        type="text"
+                        value={ghRepo}
+                        onChange={(e) => setGhRepo(e.target.value)}
+                        placeholder="portfolio"
+                        className="bg-transparent flex-1 focus:outline-none text-pink-300 font-mono font-medium"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Calculated Live GitHub Pages URL Box */}
+                {(() => {
+                  const calculatedLiveUrl = `https://${(ghUser || 'USERNAME').trim().toLowerCase()}.github.io/${(ghRepo || 'REPO').trim()}/`;
+                  return (
+                    <div className="p-4 rounded-xl bg-[#070611] border border-emerald-900/40 space-y-2">
+                      <div className="flex items-center justify-between text-xs text-neutral-400">
+                        <span className="font-semibold text-emerald-400 flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Ihr offizieller GitHub Pages Live-Link:</span>
+                        </span>
+                        <span className="text-[11px] text-neutral-400 font-mono">Weltweit erreichbar</span>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-[#0d0c1d] p-3 rounded-lg border border-purple-950">
+                        <a
+                          href={calculatedLiveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-sm text-pink-300 hover:text-pink-200 underline break-all font-semibold flex items-center gap-1.5"
+                        >
+                          <span>{calculatedLiveUrl}</span>
+                          <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                        </a>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(calculatedLiveUrl);
+                              setCopiedGhUrl(true);
+                              setTimeout(() => setCopiedGhUrl(false), 2500);
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-purple-900/50 hover:bg-purple-800 text-purple-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                          >
+                            {copiedGhUrl ? (
+                              <>
+                                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                <span className="text-emerald-400">Kopiert!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3.5 h-3.5" />
+                                <span>Link kopieren</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Crucial Fix: Why GitHub Pages isn't giving a link */}
+                <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-600/40 text-amber-200 space-y-2.5">
+                  <div className="flex items-start gap-2.5">
+                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <div>
+                      <h5 className="text-xs font-bold text-white">
+                        Warum hat GitHub Pages bisher keinen Link angezeigt? (Die 1-Minuten-Lösung)
+                      </h5>
+                      <p className="text-[11px] text-amber-200/90 leading-relaxed mt-1">
+                        GitHub schaltet Pages bei neuen Repositories standardmäßig <strong>nicht</strong> automatisch scharf. 
+                        Es zeigt erst einen Link, wenn Sie in GitHub <strong>einmalig die Quelle auf GitHub Actions umstellen</strong>:
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 text-[11px]">
+                    <div className="p-2.5 rounded-lg bg-[#070611]/80 border border-amber-800/40 space-y-1">
+                      <span className="font-bold text-amber-400">Schritt 1:</span>
+                      <p className="text-neutral-300">
+                        Öffnen Sie Ihr Repo auf GitHub und klicken Sie oben auf den Reiter <strong>Settings</strong> (Einstellungen).
+                      </p>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-[#070611]/80 border border-amber-800/40 space-y-1">
+                      <span className="font-bold text-amber-400">Schritt 2:</span>
+                      <p className="text-neutral-300">
+                        Klicken Sie in der linken Leiste auf den Menüpunkt <strong>Pages</strong>.
+                      </p>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-pink-950/40 border border-pink-700/60 space-y-1">
+                      <span className="font-bold text-pink-300">Schritt 3 (Wichtig!):</span>
+                      <p className="text-white">
+                        Wählen Sie bei <strong>Source</strong> im Dropdown <strong>"GitHub Actions"</strong> aus!
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-emerald-300/90 bg-emerald-950/40 p-2 rounded-lg border border-emerald-800/40">
+                    ✓ Die in diesem Projekt vorbereitete Datei <code>.github/workflows/deploy.yml</code> baut und veröffentlicht Ihr Portfolio automatisch. 
+                    Innerhalb von 60 Sekunden erscheint der grüne Kasten mit Ihrem Live-Link!
+                  </p>
+                </div>
+
+                {/* Git Push Terminal Commands Generator */}
+                <div className="p-4 rounded-xl bg-[#070611] border border-purple-900/40 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <Terminal className="w-3.5 h-3.5 text-pink-400" />
+                      <span>Einmalige Terminal-Befehle zum Hochladen auf GitHub:</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const commands = `git init\ngit add .\ngit commit -m "Deploy Mohamed Adam Portfolio"\ngit branch -M main\ngit remote add origin https://github.com/${ghUser.trim() || 'adammohamedgele'}/${ghRepo.trim() || 'portfolio'}.git\ngit push -u origin main`;
+                        navigator.clipboard.writeText(commands);
+                        setCopiedGhCommands(true);
+                        setTimeout(() => setCopiedGhCommands(false), 2500);
+                      }}
+                      className="px-3 py-1 rounded-lg bg-pink-600/30 hover:bg-pink-600 border border-pink-500/40 text-pink-200 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                    >
+                      {copiedGhCommands ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          <span className="text-emerald-400">Befehle kopiert!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Alle Befehle kopieren</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <pre className="p-3 rounded-lg bg-black text-pink-300 font-mono text-[11px] overflow-x-auto leading-relaxed border border-purple-950">
+{`git init
+git add .
+git commit -m "Deploy Mohamed Adam Portfolio"
+git branch -M main
+git remote add origin https://github.com/${ghUser.trim() || 'adammohamedgele'}/${ghRepo.trim() || 'portfolio'}.git
+git push -u origin main`}
+                  </pre>
+                </div>
+
+                {/* Direct Downloads & Offline Backups */}
+                <div className="pt-2">
+                  <h5 className="text-xs font-bold text-white mb-2.5">
+                    {language === 'de' ? 'Direkte Downloads & Backups:' : 'Direct Downloads & Backups:'}
+                  </h5>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <a
+                      href="/api/export/dist"
+                      download="portfolio-production-build.tar.gz"
+                      className="p-3 rounded-xl bg-[#0d0c1d] hover:bg-[#16142c] border border-purple-900/40 flex items-center justify-between text-xs text-white transition-colors"
+                    >
+                      <div>
+                        <div className="font-semibold text-pink-300">Produktions-Build</div>
+                        <div className="text-[10px] text-neutral-400">dist Archiv (.tar.gz)</div>
+                      </div>
+                      <Download className="w-4 h-4 text-pink-400" />
+                    </a>
+
+                    <a
+                      href="/api/export/repo"
+                      download="portfolio-source-repo.tar.gz"
+                      className="p-3 rounded-xl bg-[#0d0c1d] hover:bg-[#16142c] border border-purple-900/40 flex items-center justify-between text-xs text-white transition-colors"
+                    >
+                      <div>
+                        <div className="font-semibold text-pink-300">Gesamtes Repository</div>
+                        <div className="text-[10px] text-neutral-400">Quellcode Archiv (.tar.gz)</div>
+                      </div>
+                      <Download className="w-4 h-4 text-pink-400" />
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={exportDataAsJSON}
+                      className="p-3 rounded-xl bg-[#0d0c1d] hover:bg-[#16142c] border border-purple-900/40 flex items-center justify-between text-xs text-white transition-colors text-left"
+                    >
+                      <div>
+                        <div className="font-semibold text-pink-300">Portfolio Daten</div>
+                        <div className="text-[10px] text-neutral-400">JSON Snapshot</div>
+                      </div>
+                      <Download className="w-4 h-4 text-pink-400" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1624,30 +1850,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 <h4 className="text-sm font-bold text-white">
                   {language === 'de' ? 'Eigene Domain (z.B. mohamed-adam.de)' : 'Custom Domain'}
                 </h4>
-                <p className="text-neutral-400 leading-relaxed">
+                <p className="text-neutral-400 leading-relaxed text-xs">
                   {language === 'de'
-                    ? 'Sie können eine eigene Domain (wie mohamed-adam.de oder mohamedadam.it) auf diesen Dienst aufschalten. Es werden keine AI-Studio-Badges oder Wasserzeichen auf der öffentlichen Seite angezeigt.'
-                    : 'You can link your personal custom domain to this deployment. Zero AI badges or watermarks are displayed on the public site.'}
+                    ? 'Sie können eine eigene Domain (wie mohamed-adam.de oder mohamedadam.it) unter GitHub Pages eintragen (Settings > Pages > Custom domain) oder direkt per DNS auf Ihren Server aufschalten. Es werden keinerlei Werbebanner oder fremde Badges angezeigt.'
+                    : 'You can link your personal custom domain via GitHub Pages settings or DNS. Clean branding without any external badges.'}
                 </p>
-              </div>
-
-              {/* Data Backup & Reset */}
-              <div className="p-5 rounded-xl bg-[#0d0c1d] border border-purple-900/30 flex items-center justify-between gap-3">
-                <div>
-                  <h4 className="text-sm font-bold text-white">
-                    {language === 'de' ? 'Vollständiges Backup (JSON)' : 'Complete Backup (JSON)'}
-                  </h4>
-                  <p className="text-neutral-400">
-                    {language === 'de' ? 'Laden Sie alle Daten als Datei herunter.' : 'Download full portfolio snapshot.'}
-                  </p>
-                </div>
-                <button
-                  onClick={exportDataAsJSON}
-                  className="px-3.5 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-semibold flex items-center gap-1.5"
-                >
-                  <Download className="w-3.5 h-3.5 text-pink-400" />
-                  <span>Backup (JSON)</span>
-                </button>
               </div>
             </div>
           )}

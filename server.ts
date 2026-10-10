@@ -3,6 +3,7 @@ import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import nodemailer from 'nodemailer';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -175,6 +176,42 @@ async function startServer() {
     } catch (error) {
       console.error('Error saving portfolio data:', error);
       return res.status(500).json({ error: 'Failed to save portfolio data' });
+    }
+  });
+
+  // API Route: Download production build (dist) archive for direct deployment
+  app.get('/api/export/dist', (req, res) => {
+    try {
+      const distDir = path.join(__dirname, 'dist');
+      if (!fs.existsSync(distDir)) {
+        execSync('npm run build', { cwd: __dirname });
+      }
+      const tarPath = path.join(__dirname, 'portfolio-production-build.tar.gz');
+      execSync(`tar -czf "${tarPath}" -C "${distDir}" .`);
+      res.download(tarPath, 'portfolio-production-build.tar.gz', (err) => {
+        if (fs.existsSync(tarPath)) {
+          fs.unlinkSync(tarPath);
+        }
+      });
+    } catch (err) {
+      console.error('Error generating build archive:', err);
+      res.status(500).json({ error: 'Failed to generate build archive' });
+    }
+  });
+
+  // API Route: Download entire project source repository archive
+  app.get('/api/export/repo', (req, res) => {
+    try {
+      const tarPath = path.join(__dirname, 'portfolio-source-repo.tar.gz');
+      execSync(`tar --exclude="node_modules" --exclude=".git" --exclude="dist" -czf "${tarPath}" -C "${__dirname}" .`);
+      res.download(tarPath, 'portfolio-source-repo.tar.gz', (err) => {
+        if (fs.existsSync(tarPath)) {
+          fs.unlinkSync(tarPath);
+        }
+      });
+    } catch (err) {
+      console.error('Error generating source repository archive:', err);
+      res.status(500).json({ error: 'Failed to generate repository archive' });
     }
   });
 
